@@ -6,6 +6,7 @@ gridContainer = document.querySelector("#grid-container");
 let gridNumber = 16;
 gridSize = (CONTAINER_SIZE / gridNumber);
 
+// Generates grids inside grid container
 for (i = 0; i < CONTAINER_SIZE; i += gridSize) {
     for (j = 0; j < CONTAINER_SIZE; j += gridSize) {
         grid = document.createElement("div");
@@ -21,6 +22,23 @@ for (i = 0; i < CONTAINER_SIZE; i += gridSize) {
 }
 
 // TODO: Add a click and drag effect for inking sketch pad with cursor using event listeners
+let penToggle = false;
 
+const grids = document.querySelectorAll(".grid");
+grids.forEach((grid) => {
+
+    // Toggles pen with click
+    grid.addEventListener("mousedown", () => {
+        penToggle = !penToggle;
+        grid.style.background = "black";        
+    });
+    
+    // Change grid color on hover if toggle is active
+    grid.addEventListener("mouseover", () => {
+        if (penToggle) {
+            grid.style.background = "black";
+        };
+    });
+});
 
 // TODO: Add user input form to select how many grids to populate sketchpad (MAX 100)
