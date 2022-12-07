@@ -28,4 +28,6 @@ header {
     justify-content: center;
     gap: 10px;
     margin: 10px;
+    align-items: center;
+    /* border: 1px solid black; */
 }
