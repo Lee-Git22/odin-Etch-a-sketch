@@ -3,9 +3,9 @@ const CONTAINER_SIZE = 512;
 
 gridContainer = document.querySelector("#grid-container");
 
+// Default properties of sketchpad and pen color
 let numOfGrids = 16;
 let gridSize = CONTAINER_SIZE / numOfGrids;
-
 let penToggle = false;
 let penColor = "black";
 let recentColor = "black";
@@ -14,22 +14,21 @@ let recentColor = "black";
 function generateSketchpad (numOfGrids) {
     gridSize = (CONTAINER_SIZE / numOfGrids);
 
-    for (i = 0; i < CONTAINER_SIZE; i += gridSize) {
-        for (j = 0; j < CONTAINER_SIZE; j += gridSize) {
+    for (i = 0; i < numOfGrids; i++) {
+        for (j = 0; j < numOfGrids; j++) {
         grid = document.createElement("div");
         grid.setAttribute("class", "grid");
 
-        // Account for grid border and padding
-        grid.style.width = (gridSize - 4 ) + "px";
-        grid.style.height = (gridSize - 4) + "px";
+        // Account for grid border
+        grid.style.width = (gridSize - 4.01) + "px";
+        grid.style.height = (gridSize - 4.01) + "px";
 
         gridContainer.append(grid);
         };
     };
 };
 
-// TODO: Add a click and drag effect for inking sketch pad with cursor using event listeners
-// Modifies the grid colors
+// Loads pen for applying color to grids
 function loadPen(penToggle, penColor) {
     let grids = document.querySelectorAll(".grid");
     grids.forEach((grid) => {
@@ -47,9 +46,9 @@ function loadPen(penToggle, penColor) {
             };
         });
     });
-}
+};
 
-// Makes default sketpad of size 16
+// Makes default sketpad of size 16 and black pen
 generateSketchpad(numOfGrids);
 loadPen(penToggle, penColor);
 
@@ -60,10 +59,12 @@ loadPen(penToggle, penColor);
 const gridNumberInput = document.querySelector("#gridNumber-input");
 const sketchPadRequest = document.querySelector("#new-pad");
 
+// Takes user input sketchpad size from from
 gridNumberInput.addEventListener("change", () => {
     numOfGrids = gridNumberInput.value;    
 })
 
+// Validates size and generates new sketchpad
 sketchPadRequest.addEventListener("click", () => {
     if (gridNumberInput.value > 64){
         numOfGrids = 64;
@@ -71,15 +72,17 @@ sketchPadRequest.addEventListener("click", () => {
     else if (gridNumberInput.value < 8){
         numOfGrids = 8;
     }
-    console.log("numOfGrids is " + numOfGrids);
+
+
+
     // Clear current sketchpad
     while (gridContainer.firstChild) {
         gridContainer.removeChild(gridContainer.firstChild);
     }
-    // Populate new sketchpad
+
+    // Populate new sketchpad and pen
     generateSketchpad(numOfGrids);
     loadPen(penToggle, penColor);
-
 })
 
 // Reset button
@@ -97,7 +100,6 @@ colorPicker.addEventListener("change", () => {
     penColor = colorPicker.value;
     recentColor = penColor;
     loadPen(penToggle, penColor);
-
 })
 
 
@@ -107,7 +109,6 @@ eraser.addEventListener("click", () => {
     recentColor = penColor;
     penColor = "white";
     loadPen(penToggle, penColor);
-
 });
 
 const pen = document.querySelector("#pen");
