@@ -1,5 +1,5 @@
 // TODO: Populate a 512px square div with 16x16 grids using some loop
-const CONTAINER_SIZE = 512;
+const CONTAINER_SIZE = 512.00;
 
 gridContainer = document.querySelector("#grid-container");
 
@@ -32,11 +32,11 @@ function generateSketchpad (numOfGrids) {
 function loadPen(penToggle, penColor, penFunction) {
     let grids = document.querySelectorAll(".grid");
     grids.forEach((grid) => {
-    
+
         // Toggles pen with click
         grid.addEventListener("mousedown", () => {
             penToggle = !penToggle;
-            grid.style.background = penColor;        
+            grid.style.background = penFunction(penColor);        
         });
 
         // Change grid color on hover if toggle is active
@@ -47,6 +47,7 @@ function loadPen(penToggle, penColor, penFunction) {
         });
     });
 };
+
 
 function getRGBArray(hexValue) {
     hexValue = hexValue.slice(1);
@@ -63,6 +64,7 @@ function toRGB(rgbArray){
     rgb = `rgb(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]})`;
     return rgb;
 }
+
 function defaultPen(penColor) {
     return penColor;
 }
@@ -77,11 +79,6 @@ function getRainbow(penColor) {
     return penColor;
 }
 
-function getShade(penColor) {
-    // select current grid 
-    // determine rgb
-    // - 10% on all 3 value and set as penColor
-}
 
 // Makes default sketpad of size 16 and black pen
 generateSketchpad(numOfGrids);
@@ -140,7 +137,7 @@ colorPicker.addEventListener("change", () => {
 })
 
 
-// Eraser & Pen
+// Eraser 
 const eraser = document.querySelector("#eraser");
 eraser.addEventListener("click", () => {
     recentColor = penColor;
@@ -148,25 +145,43 @@ eraser.addEventListener("click", () => {
     loadPen(penToggle, penColor, defaultPen);
 });
 
+// Pen Toggle
 const pen = document.querySelector("#pen");
 pen.addEventListener("click", () => {
     penColor = recentColor;
     loadPen(penToggle, penColor, defaultPen);
 })
 
-// TODO: Rainbow mode
+// Rainbow mode
 const rainbow = document.querySelector("#rainbow");
 rainbow.addEventListener("click", () => {
     recentColor = "rgb(0, 0, 0)";
     loadPen(penToggle, penColor, getRainbow);
 })
 
-// TODO: Shade mode (adds increment amounts of shade)
-const shade = document.querySelector("#shade");
-shade.addEventListener("click", () => {
-    recentColor = "rgb(0, 0, 0)";
-    
+// Extra Credit Features 
+// // TODO: Shade mode (adds increment amounts of shade)
+// const shade = document.querySelector("#shade");
+// shade.addEventListener("click", () => {
+//     recentColor = "rgb(0, 0, 0)";
 
-})
-// TODO: Highlight mode
+//     let grids = document.querySelectorAll(".grid");
+//     grids.forEach((grid) => {
+
+//         // Toggles pen with click
+//         grid.addEventListener("mousedown", () => {
+//             penToggle = !penToggle;
+//             grid.style.background = (grid.style.background.value * 0.9);        
+//         });
+
+//         // Change grid color on hover if toggle is active
+//         grid.addEventListener("mouseover", () => {
+//             if (penToggle) {
+//                 grid.style.background += "rgb(25,25,25)";
+//                 console.log(rgb)         
+//             };
+//         });
+//     });
+// })
+// // TODO: Highlight mode
 
