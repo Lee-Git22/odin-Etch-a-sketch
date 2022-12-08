@@ -7,8 +7,8 @@ gridContainer = document.querySelector("#grid-container");
 let numOfGrids = 16;
 let gridSize = CONTAINER_SIZE / numOfGrids;
 let penToggle = false;
-let penColor = "black";
-let recentColor = "black";
+let penColor = "rgb(0, 0, 0)";
+let recentColor = "rgb(0, 0, 0)";
 
 // Generates grids inside grid container
 function generateSketchpad (numOfGrids) {
@@ -29,7 +29,7 @@ function generateSketchpad (numOfGrids) {
 };
 
 // Loads pen for applying color to grids
-function loadPen(penToggle, penColor) {
+function loadPen(penToggle, penColor, penFunction) {
     let grids = document.querySelectorAll(".grid");
     grids.forEach((grid) => {
     
@@ -42,19 +42,53 @@ function loadPen(penToggle, penColor) {
         // Change grid color on hover if toggle is active
         grid.addEventListener("mouseover", () => {
             if (penToggle) {
-                grid.style.background = penColor;
+                grid.style.background = penFunction(penColor);
             };
         });
     });
 };
 
+function getRGBArray(hexValue) {
+    hexValue = hexValue.slice(1);
+    hexArray = hexValue.match(/.{1,2}/g);
+    rgbArray = [
+        parseInt(hexArray[0], 16),
+        parseInt(hexArray[1], 16),
+        parseInt(hexArray[2], 16)
+    ];
+    return rgbArray;
+}
+
+function toRGB(rgbArray){
+    rgb = `rgb(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]})`;
+    return rgb;
+}
+function defaultPen(penColor) {
+    return penColor;
+}
+
+function getRainbow(penColor) {
+    rgbArray = [
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255)
+    ];
+    penColor = toRGB(rgbArray);
+    return penColor;
+}
+
+function getShade(penColor) {
+    // select current grid 
+    // determine rgb
+    // - 10% on all 3 value and set as penColor
+}
+
 // Makes default sketpad of size 16 and black pen
 generateSketchpad(numOfGrids);
-loadPen(penToggle, penColor);
+loadPen(penToggle, penColor, defaultPen);
 
 
 // Features 
-
 // TODO: Add user input form to select how many grids to populate sketchpad (MAX 64)
 const gridNumberInput = document.querySelector("#gridNumber-input");
 const sketchPadRequest = document.querySelector("#new-pad");
@@ -68,12 +102,13 @@ gridNumberInput.addEventListener("change", () => {
 sketchPadRequest.addEventListener("click", () => {
     if (gridNumberInput.value > 64){
         numOfGrids = 64;
+        gridNumberInput.value = 64;
+
     }
     else if (gridNumberInput.value < 8){
         numOfGrids = 8;
+        gridNumberInput.value = 8;
     }
-
-
 
     // Clear current sketchpad
     while (gridContainer.firstChild) {
@@ -82,7 +117,7 @@ sketchPadRequest.addEventListener("click", () => {
 
     // Populate new sketchpad and pen
     generateSketchpad(numOfGrids);
-    loadPen(penToggle, penColor);
+    loadPen(penToggle, penColor,defaultPen);
 })
 
 // Reset button
@@ -90,16 +125,18 @@ const reset = document.querySelector("#reset");
 reset.addEventListener("click", () => {
     let grids = document.querySelectorAll(".grid");
     grids.forEach((grid) => {
-        grid.style.background = "white";
+        grid.style.background = "rgb(255, 255, 255)";
     })
 })
 
 // Color Picker
 const colorPicker = document.querySelector("#colorpicker");
 colorPicker.addEventListener("change", () => {
-    penColor = colorPicker.value;
+    tmpArray = getRGBArray(colorPicker.value);
+    penColor = toRGB(tmpArray);
+
     recentColor = penColor;
-    loadPen(penToggle, penColor);
+    loadPen(penToggle, penColor, defaultPen);
 })
 
 
@@ -107,19 +144,29 @@ colorPicker.addEventListener("change", () => {
 const eraser = document.querySelector("#eraser");
 eraser.addEventListener("click", () => {
     recentColor = penColor;
-    penColor = "white";
-    loadPen(penToggle, penColor);
+    penColor = "rgb(255, 255, 255)";
+    loadPen(penToggle, penColor, defaultPen);
 });
 
 const pen = document.querySelector("#pen");
 pen.addEventListener("click", () => {
     penColor = recentColor;
-    loadPen(penToggle, penColor);
+    loadPen(penToggle, penColor, defaultPen);
 })
 
 // TODO: Rainbow mode
+const rainbow = document.querySelector("#rainbow");
+rainbow.addEventListener("click", () => {
+    recentColor = "rgb(0, 0, 0)";
+    loadPen(penToggle, penColor, getRainbow);
+})
 
 // TODO: Shade mode (adds increment amounts of shade)
+const shade = document.querySelector("#shade");
+shade.addEventListener("click", () => {
+    recentColor = "rgb(0, 0, 0)";
+    
 
-
+})
+// TODO: Highlight mode
 
